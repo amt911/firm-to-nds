@@ -1,10 +1,10 @@
-# firm-to-nds-dspico
+# firm-to-nds
 
 Tool to convert `.firm` (binary firmware) files to `.nds` format by prepending the required header.
 
 ## Description
 
-This script takes a `.firm` file and generates an `.nds` file by automatically adding `header.bin` to the beginning. It's useful for preparing Nintendo DS/DSi firmware for use on compatible devices.
+This script takes a `.firm` file and generates an `.nds` file by automatically adding `header.bin` to the beginning. It's useful for preparing Nintendo DS/DSi firmware for use on official development flashcards (DSPico and other compatible devices).
 
 ## Requirements
 
@@ -15,8 +15,8 @@ This script takes a `.firm` file and generates an `.nds` file by automatically a
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/amt911/firm-to-nds-dspico.git
-   cd firm-to-nds-dspico
+   git clone https://github.com/amt911/firm-to-nds.git
+   cd firm-to-nds
    ```
 
 2. Verify that `header.bin` is present in the directory.
@@ -56,7 +56,7 @@ python firm_to_nds.py
 ## Project structure
 
 ```
-firm-to-nds-dspico/
+firm-to-nds/
 ├── header.bin          # Binary header prepended to the output
 ├── firm_to_nds.py      # Conversion script
 └── README.md           # This file
