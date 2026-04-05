@@ -1,17 +1,7 @@
 #!/usr/bin/env python3
-"""
-firm_to_nds.py - Converts a .firm file to .nds by prepending header.bin.
+"""Converts a .firm file to .nds by prepending header.bin."""
 
-Usage:
-    python firm_to_nds.py [--dev] <input.firm> [output.nds]
-
-Options:
-    --dev   Use header_dev.bin instead of header.bin (for 3DS dev consoles)
-
-If no output path is given, the output file will have the same name
-as the input but with a .nds extension.
-"""
-
+import argparse
 import sys
 import os
 
@@ -44,20 +34,39 @@ def convert(firm_path: str, nds_path: str, header_path: str) -> None:
 
 
 def main() -> None:
-    args = [a for a in sys.argv[1:] if a != "--dev"]
-    dev_mode = len(args) != len(sys.argv[1:])
+    parser = argparse.ArgumentParser(
+        description="Converts a .firm file to .nds by prepending header.bin.",
+    )
+    parser.add_argument(
+        "input",
+        help="path to the input .firm file",
+    )
+    parser.add_argument(
+        "output",
+        nargs="?",
+        default=None,
+        help="path to the output .nds file (default: input name with .nds extension)",
+    )
+    parser.add_argument(
+        "--dev",
+        action="store_true",
+        help="use header_dev.bin instead of header.bin (for 3DS dev consoles)",
+    )
 
-    if len(args) < 1:
-        print(__doc__.strip())
+    if len(sys.argv) == 1:
+        parser.print_help()
         sys.exit(1)
 
-    firm_path = args[0]
-    if len(args) >= 2:
-        nds_path = args[1]
-    else:
-        nds_path = os.path.splitext(firm_path)[0] + ".nds"
+    args = parser.parse_args()
 
-    header_path = HEADER_DEV_PATH if dev_mode else HEADER_PATH
+    firm_path = args.input
+    nds_path = args.output if args.output else os.path.splitext(firm_path)[0] + ".nds"
+
+    out_dir = os.path.dirname(nds_path)
+    if out_dir and not os.path.isdir(out_dir):
+        sys.exit(f"Error: output directory does not exist: {out_dir}")
+
+    header_path = HEADER_DEV_PATH if args.dev else HEADER_PATH
     convert(firm_path, nds_path, header_path)
 
 
