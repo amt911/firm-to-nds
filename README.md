@@ -32,9 +32,10 @@ python firm_to_nds.py [--dev] <input_file.firm> [output_file.nds]
 
 ### Options
 
-| Option  | Description                                                        |
-|---------|--------------------------------------------------------------------|
-| `--dev` | Use `header_dev.bin` instead of `header.bin` (for 3DS dev consoles) |
+| Option       | Description                                                        |
+|--------------|--------------------------------------------------------------------|
+| `-h, --help` | Show the help message and exit                                     |
+| `--dev`      | Use `header_dev.bin` instead of `header.bin` (for 3DS dev consoles) |
 
 ### Examples
 
@@ -60,9 +61,10 @@ python firm_to_nds.py --dev firmware.firm
 
 ### Help
 
-Without arguments, the script displays help:
+Without arguments (or with `-h` / `--help`), the script displays help:
 ```bash
 python firm_to_nds.py
+python firm_to_nds.py --help
 ```
 
 ## Project structure
