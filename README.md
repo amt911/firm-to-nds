@@ -10,6 +10,7 @@ This script takes a `.firm` file and generates an `.nds` file by automatically a
 
 - Python 3.6 or higher
 - The `header.bin` file must be in the same directory as the script
+- For 3DS dev consoles, `header_dev.bin` must also be present in the same directory
 
 ## Installation
 
@@ -26,8 +27,14 @@ This script takes a `.firm` file and generates an `.nds` file by automatically a
 ### Basic syntax
 
 ```bash
-python firm_to_nds.py <input_file.firm> [output_file.nds]
+python firm_to_nds.py [--dev] <input_file.firm> [output_file.nds]
 ```
+
+### Options
+
+| Option  | Description                                                        |
+|---------|--------------------------------------------------------------------|
+| `--dev` | Use `header_dev.bin` instead of `header.bin` (for 3DS dev consoles) |
 
 ### Examples
 
@@ -46,6 +53,11 @@ python firm_to_nds.py firmware.firm my_output.nds
 python firm_to_nds.py C:\roms\firmware.firm C:\output\firmware.nds
 ```
 
+**For 3DS dev consoles** (uses `header_dev.bin`):
+```bash
+python firm_to_nds.py --dev firmware.firm
+```
+
 ### Help
 
 Without arguments, the script displays help:
@@ -58,6 +70,7 @@ python firm_to_nds.py
 ```
 firm-to-nds/
 ├── header.bin          # Binary header prepended to the output
+├── header_dev.bin      # Alternative header for 3DS dev consoles
 ├── firm_to_nds.py      # Conversion script
 └── README.md           # This file
 ```
@@ -76,7 +89,7 @@ The process is simple:
 
 ## Notes
 
-- The script looks for `header.bin` in the same directory where it's located, regardless of where you run it from.
+- The script looks for `header.bin` (or `header_dev.bin` when using `--dev`) in the same directory where it's located, regardless of where you run it from.
 - If the output file already exists, it will be overwritten without confirmation.
 - The script displays the total size of the generated file upon completion.
 
