@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile-check:
+    name: Python syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python -m py_compile firm_to_nds.py
+
+  sast:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    # Advisory: not currently blocking, to avoid turning main red on a still-evolving ruleset.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install semgrep
+      # Verified 0 findings locally against p/python.
+      - run: >-
+          semgrep scan --disable-version-check --metrics=off
+          --config p/python
