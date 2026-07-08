@@ -48,6 +48,26 @@ python firm_to_nds.py [--dev] <input.firm> [output.nds]
 # --dev  → use header_dev.bin instead of header.bin
 ```
 
+## Agentic PR verification (MANDATORY on every PR)
+
+**Every PR MUST be verified end-to-end before merge, and the verdict MUST be posted as a PR
+comment** via `gh pr comment`. A headless agent (`claude -p`, local) drives the change and posts
+the result; it **never merges** — it waits for you. Running the pass and posting the verdict
+comment is **not optional**. It catches what a diff and a syntax check miss: a broken `--dev`
+flag, a wrong output path, a corrupted header/firm concatenation.
+
+- **Engine.** No browser, no server — this is a one-shot CLI. Verification means: run
+  `firm_to_nds.py` end-to-end against a **throwaway sample input**, e.g.
+  `dd if=/dev/urandom of=/tmp/sample.firm bs=1024 count=4` (or any small non-real dummy file),
+  then `python firm_to_nds.py /tmp/sample.firm /tmp/sample.nds` and confirm the output exists,
+  its size equals `header.bin` + input size, and its first bytes match `header.bin`; repeat with
+  `--dev` against `header_dev.bin`. Also check `-h`/no-args prints help and exits non-zero.
+  Never point it at real firmware dumps.
+- **Two layers.** Deterministic checks (`python -m py_compile`) stay the hard merge gate; the
+  agentic pass is advisory and never vetoes a merge on its own — but running it and posting the
+  verdict comment is mandatory.
+- **Hard limits.** The verdict awaits your close; the agent never merges.
+
 ## Working rules
 
 - **The header `.bin` files must ship with the script** — the tool reads them from its own
